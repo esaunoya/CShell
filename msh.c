@@ -46,16 +46,11 @@
 
 #define MAX_NUM_ARGUMENTS 10     // Mav shell only supports five arguments
 
-pid_t pid;
-pid_t parent_pid;
-pid_t child_pid;
-
 int main()
 {
 
   char * cmd_str = (char*) malloc( MAX_COMMAND_SIZE );
 
-  parent_pid = getpid();
   while( 1 )
   {
     // Print out the msh prompt
@@ -105,6 +100,7 @@ int main()
     //   printf("token[%d] = %s\n", token_index, token[token_index] );  
     // }
 
+
     if(token[0] == NULL)
     {
       // In case of no input... DO NOTHING!!!
@@ -122,33 +118,55 @@ int main()
       // test remove later
       // system("pwd");
     }
-    else{
-      
-      pid = fork();
-      
-      if(pid == 0)
+    
+    else
+    {
+      pid_t pid = fork( );
+
+      if( pid == 0 )
       {
-        int ret = execl( "/bin/ls", token[0], token[1], token[2], token[3], token[4],
-                                    token[5], token[6], token[7], token[8], token[9]);                              
-  
+        printf("./ \n");
+        char dirs[25] = "./";
+        strcat(dirs, token[0]);
+        int ret = execl( dirs, token[0], token[1], token[2], token[3], token[4], token[5], token[6], token[7], token[8], token[9] );
+
+        if(ret == -1)
+        {
+          char dirs[25] = "/usr/local/bin/";
+          strcat(dirs, token[0]); 
+          ret = execl( dirs, token[0], token[1], token[2], token[3], token[4], token[5], token[6], token[7], token[8], token[9] );
+        }
+          
+        if(ret == -1)
+        {
+          char dirs[25] = "/usr/bin/";
+          strcat(dirs, token[0]); 
+          ret = execl( dirs, token[0], token[1], token[2], token[3], token[4], token[5], token[6], token[7], token[8], token[9] );
+        }
+          
+        if(ret == -1)
+        {
+          char dirs[25] = "/bin/";
+          strcat(dirs, token[0]); 
+          ret = execl( dirs, token[0], token[1], token[2], token[3], token[4], token[5], token[6], token[7], token[8], token[9] );
+        }
+        
         if( ret == -1 )
         {
           perror("execl failed: ");
         }
-
+        
         exit(0);
       }
-      else
+      else 
       {
         int status;
         wait( & status );
       }
-      
+
     }
 
-
     free( working_root );
-
   }
   return 0;
 }
