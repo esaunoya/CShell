@@ -44,13 +44,18 @@
 
 #define MAX_COMMAND_SIZE 255    // The maximum command-line size
 
-#define MAX_NUM_ARGUMENTS 5     // Mav shell only supports five arguments
+#define MAX_NUM_ARGUMENTS 10     // Mav shell only supports five arguments
+
+pid_t pid;
+pid_t parent_pid;
+pid_t child_pid;
 
 int main()
 {
 
   char * cmd_str = (char*) malloc( MAX_COMMAND_SIZE );
 
+  parent_pid = getpid();
   while( 1 )
   {
     // Print out the msh prompt
@@ -102,20 +107,44 @@ int main()
 
     if(token[0] == NULL)
     {
-      // DO NOTHING!!!
+      // In case of no input... DO NOTHING!!!
     }
-    // "exit" or "quit" terminates program
+    // "exit" or "quit" terminates program with status 0
     else if(strncmp(token[0], "exit", 5) == 0 || strncmp(token[0], "quit", 5) == 0)
     {
       exit(0);  
     }
-    else if(strncmp(token[0], "cd", 5) == 0)
+    // Support the cd command to change directories.
+    // Handles '..'
+    else if(strncmp(token[0], "cd", 5) == 0 )
     {
       chdir(token[1]);
       // test remove later
       // system("pwd");
     }
+    else{
+      
+      pid = fork();
+      
+      if(pid == 0)
+      {
+        int ret = execl( "/bin/ls", token[0], token[1], token[2], token[3], token[4],
+                                    token[5], token[6], token[7], token[8], token[9]);                              
+  
+        if( ret == -1 )
+        {
+          perror("execl failed: ");
+        }
 
+        exit(0);
+      }
+      else
+      {
+        int status;
+        wait( & status );
+      }
+      
+    }
 
 
     free( working_root );
