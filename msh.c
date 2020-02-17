@@ -125,35 +125,39 @@ int main()
 
       if( pid == 0 )
       {
-        printf("./ \n");
         char dirs[25] = "./";
         strcat(dirs, token[0]);
-        int ret = execl( dirs, token[0], token[1], token[2], token[3], token[4], token[5], token[6], token[7], token[8], token[9] );
+        int ret = execl( dirs, token[0], token[1], token[2], token[3], token[4],
+                               token[5], token[6], token[7], token[8], token[9], NULL );
 
         if(ret == -1)
         {
           char dirs[25] = "/usr/local/bin/";
           strcat(dirs, token[0]); 
-          ret = execl( dirs, token[0], token[1], token[2], token[3], token[4], token[5], token[6], token[7], token[8], token[9] );
+          ret = execl( dirs, token[0], token[1], token[2], token[3], token[4],
+                             token[5], token[6], token[7], token[8], token[9], NULL );
         }
           
         if(ret == -1)
         {
           char dirs[25] = "/usr/bin/";
           strcat(dirs, token[0]); 
-          ret = execl( dirs, token[0], token[1], token[2], token[3], token[4], token[5], token[6], token[7], token[8], token[9] );
+          ret = execl( dirs, token[0], token[1], token[2], token[3], token[4],
+                             token[5], token[6], token[7], token[8], token[9], NULL );
         }
           
         if(ret == -1)
         {
           char dirs[25] = "/bin/";
           strcat(dirs, token[0]); 
-          ret = execl( dirs, token[0], token[1], token[2], token[3], token[4], token[5], token[6], token[7], token[8], token[9] );
+          ret = execl( dirs, token[0], token[1], token[2], token[3], token[4],
+                             token[5], token[6], token[7], token[8], token[9], NULL );
         }
         
         if( ret == -1 )
         {
-          perror("execl failed: ");
+          printf("%s: Command not found.\n", token[0]);
+          // perror("execl failed: ");
         }
         
         exit(0);
