@@ -1,3 +1,10 @@
+/*
+
+  Name: Esau Noya
+  ID:   1001301929
+
+*/
+
 // The MIT License (MIT)
 // 
 // Copyright (c) 2016, 2017 Trevor Bakker 
@@ -87,11 +94,29 @@ int main()
     // Now print the tokenized input as a debug check
     // \TODO Remove this code and replace with your shell functionality
 
-    int token_index  = 0;
-    for( token_index = 0; token_index < token_count; token_index ++ ) 
+    // int token_index  = 0;
+    // for( token_index = 0; token_index < token_count; token_index ++ ) 
+    // {
+    //   printf("token[%d] = %s\n", token_index, token[token_index] );  
+    // }
+
+    if(token[0] == NULL)
     {
-      printf("token[%d] = %s\n", token_index, token[token_index] );  
+      // DO NOTHING!!!
     }
+    // "exit" or "quit" terminates program
+    else if(strncmp(token[0], "exit", 5) == 0 || strncmp(token[0], "quit", 5) == 0)
+    {
+      exit(0);  
+    }
+    else if(strncmp(token[0], "cd", 5) == 0)
+    {
+      chdir(token[1]);
+      // test remove later
+      // system("pwd");
+    }
+
+
 
     free( working_root );
 
